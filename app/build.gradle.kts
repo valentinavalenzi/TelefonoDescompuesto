@@ -68,7 +68,8 @@ openApiGenerate {
 //    apiPackage.set("ar.edu.austral.inf.sd")
 //    packageName.set("ar.edu.austral.inf.sd")
 
-    // configOptions.put("appendRequestToHandler", "true")
+//    configOptions.put("appendRequestToHandler", "true")
+//    configOptions.put("reactive", "true")
     configOptions.put("serviceInterface", "true")
 
     configOptions.put("apiPackage", "ar.edu.austral.inf.sd")

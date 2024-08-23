@@ -63,7 +63,14 @@
         },
         "responses": {
           "202": {
-            "description": "mensaje recibido y reenviado."
+            "description": "mensaje recibido y reenviado.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         }
       }
