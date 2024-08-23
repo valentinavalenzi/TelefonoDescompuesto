@@ -1,0 +1,70 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "TP1 - Teléfono descompuesto",
+    "description": "Title",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/register-node": {
+      "post": {
+        "description": "Registra un nuevo nodo",
+        "parameters": [
+          {
+            "name": "host",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "port",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Todo bien",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "nextHost",
+                    "nextPort",
+                    "uuid",
+                    "hash"
+                  ],
+                  "properties": {
+                    "nextHost": {
+                      "type": "string"
+                    },
+                    "nextPort": {
+                      "type": "integer"
+                    },
+                    "uuid": {
+                      "type": "string"
+                    },
+                    "hash": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

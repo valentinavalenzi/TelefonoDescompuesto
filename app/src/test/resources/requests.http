@@ -1,0 +1,5 @@
+###
+POST http://localhost:8080/register-node?
+    host=1.2.3.4&
+    port=8080&
+    name=SoyLegenda
