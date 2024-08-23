@@ -8,6 +8,7 @@
   "paths": {
     "/register-node": {
       "post": {
+        "operationId": "registerNode",
         "description": "Registra un nuevo nodo",
         "parameters": [
           {
@@ -38,27 +39,138 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "nextHost",
-                    "nextPort",
-                    "uuid",
-                    "hash"
-                  ],
-                  "properties": {
-                    "nextHost": {
-                      "type": "string"
-                    },
-                    "nextPort": {
-                      "type": "integer"
-                    },
-                    "uuid": {
-                      "type": "string"
-                    },
-                    "hash": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/registerResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/relay": {
+      "post": {
+        "operationId": "relayMessage",
+        "description": "Firma un mensaje y lo manda al siguiente",
+        "requestBody": {
+          "description": "El mensaje y las firmas anteriores",
+          "content": {
+            "multipart/mixed": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "mensaje recibido y reenviado."
+          }
+        }
+      }
+    },
+    "/play": {
+      "post": {
+        "operationId": "sendMessage",
+        "description": "Comienza el juego!",
+        "requestBody": {
+          "description": "El mensaje a enviar por la red telefónica",
+          "required": true,
+          "content": {
+            "*/*": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "La red telefónica funcionó bien!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/playResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "La red telefónica falló",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/playResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "registerRequest": {
+        "type": "object",
+        "required": [
+          "host",
+          "port",
+          "name"
+        ],
+        "properties": {
+          "host": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "registerResponse": {
+        "type": "object",
+        "required": [
+          "nextHost",
+          "nextPort",
+          "uuid",
+          "hash"
+        ],
+        "properties": {
+          "nextHost": {
+            "type": "string"
+          },
+          "nextPort": {
+            "type": "integer"
+          },
+          "uuid": {
+            "type": "string"
+          },
+          "hash": {
+            "type": "string"
+          }
+        }
+      },
+      "playResponse": {
+        "type": "object",
+        "properties": {
+          "hash": {
+            "type": "string",
+            "description": "el hash del mensaje original que enviaste"
+          },
+          "signatures": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "El nombre del nodo que firmo"
+                },
+                "hash": {
+                  "type": "string",
+                  "description": "El hash de la firma del nodo"
                 }
               }
             }
