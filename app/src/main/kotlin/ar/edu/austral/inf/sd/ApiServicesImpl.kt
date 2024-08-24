@@ -5,6 +5,7 @@ import ar.edu.austral.inf.sd.api.RegisterNodeApiService
 import ar.edu.austral.inf.sd.api.RelayApiService
 import ar.edu.austral.inf.sd.model.PlayResponse
 import ar.edu.austral.inf.sd.model.RegisterResponse
+import ar.edu.austral.inf.sd.model.Signature
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.context.request.RequestContextHolder
@@ -41,14 +42,14 @@ class ApiServicesImpl: RegisterNodeApiService, RelayApiService, PlayApiService {
         return RegisterResponse(nextNode.nextHost, nextNode.nextPort, uuid, newSalt())
     }
 
-    override fun relayMessage() {
+    override fun relayMessage(message: String, signature: String?) {
         TODO("Not yet implemented")
     }
 
-    override fun sendMessage(body: ByteArray): PlayResponse {
-        val hash = doHash(body, salt)
-        println("body = ${body}")
-        println("bodyName = ${body.javaClass.name}")
+    override fun sendMessage(body: String): PlayResponse {
+        val hash = doHash(body.encodeToByteArray(), salt)
+//        println("body = ${body}")
+//        println("bodyName = ${body.javaClass.name}")
         println("request().contentType = ${request().contentType}")
         return PlayResponse(hash)
     }

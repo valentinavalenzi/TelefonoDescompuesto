@@ -51,13 +51,33 @@
       "post": {
         "operationId": "relayMessage",
         "description": "Firma un mensaje y lo manda al siguiente",
+        "x-content-type": "multipart/form-data",
         "requestBody": {
           "description": "El mensaje y las firmas anteriores",
           "content": {
             "multipart/form-data": {
+              "encoding": {
+                "message": {
+                  "contentType": "*/*"
+                },
+                "signature": {
+                  "contentType": "text/plain",
+                  "style": ""
+                }
+              },
               "schema": {
                 "type": "object",
-                "format": "binary"
+                "required": [
+                  "message"
+                ],
+                "properties": {
+                  "message": {
+                    "$ref": "#/components/schemas/base64String"
+                  },
+                  "signature": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }
@@ -86,8 +106,8 @@
           "content": {
             "*/*": {
               "schema": {
-                "type": "object",
-                "format": "binary"
+                "type": "string",
+                "format": "base64"
               }
             }
           }
@@ -119,6 +139,10 @@
   },
   "components": {
     "schemas": {
+      "base64String": {
+        "type": "string",
+        "format": "base64"
+      },
       "registerRequest": {
         "type": "object",
         "required": [
@@ -161,6 +185,19 @@
           }
         }
       },
+      "signature": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "El nombre del nodo que firmo"
+          },
+          "hash": {
+            "type": "string",
+            "description": "El hash de la firma del nodo"
+          }
+        }
+      },
       "playResponse": {
         "type": "object",
         "properties": {
@@ -171,17 +208,7 @@
           "signatures": {
             "type": "array",
             "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "description": "El nombre del nodo que firmo"
-                },
-                "hash": {
-                  "type": "string",
-                  "description": "El hash de la firma del nodo"
-                }
-              }
+              "$ref": "#/components/schemas/signature"
             }
           }
         }

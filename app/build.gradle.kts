@@ -52,7 +52,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "ar.edu.austral.inf.sd.ApplicationKt"
+    mainClass = "ar.edu.austral.inf.sd.app.ApplicationKt"
 }
 
 tasks.named<Test>("test") {
@@ -80,6 +80,7 @@ openApiGenerate {
     configOptions.put("documentationProvider", "none")
 
     typeMappings.put("object+binary", "kotlin.ByteArray")
+    typeMappings.put("object+multipart", "kotlin.ByteArray")
 
     outputDir.set(projectDir.resolve("build/generated").absolutePath)
 }
