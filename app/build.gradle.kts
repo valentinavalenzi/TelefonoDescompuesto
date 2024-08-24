@@ -64,19 +64,18 @@ openApiGenerate {
     System.out.println(templateDir)
     templateDir.set(project.layout.projectDirectory.dir("src/main/openapi-generator").toString())
     generatorName.set("kotlin-spring")
+    generateApiTests.set(false)
+    generateApiDocumentation.set(false)
     inputSpec.set(projectDir.resolve("src/main/openapi.json").path)
-//    apiPackage.set("ar.edu.austral.inf.sd")
-//    packageName.set("ar.edu.austral.inf.sd")
 
 //    configOptions.put("appendRequestToHandler", "true")
 //    configOptions.put("reactive", "true")
     configOptions.put("serviceInterface", "true")
 
-    configOptions.put("gradleBuildFile", "false")
     configOptions.put("basePackage", "ar.edu.austral.inf.sd.base")
     configOptions.put("apiPackage", "ar.edu.austral.inf.sd.api")
     configOptions.put("modelPackage", "ar.edu.austral.inf.sd.model")
-    configOptions.put("gradleBuildFile", "true")
+    configOptions.put("gradleBuildFile", "false")
     configOptions.put("useSpringBoot3", "true")
     configOptions.put("documentationProvider", "none")
 
