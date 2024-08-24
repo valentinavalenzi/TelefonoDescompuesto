@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.update
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
@@ -57,17 +58,24 @@ class ApiServicesImpl: RegisterNodeApiService, RelayApiService, PlayApiService {
     override fun relayMessage(message: kotlin.String, signatures: kotlin.collections.List<Signature>?): Signature {
         val current = currentMessageWaiting.getAndUpdate { null }
         val receivedHash = doHash(message.encodeToByteArray(), salt)
+        val receivedContentType = currentContentType()
+        val receivedLength = message.length
         if (current != null) {
             // me llego algo, no lo tengo que pasar
             val response = current.copy(
                 receivedHash = receivedHash,
-                receivedLength = message.length,
-                receivedContentType = currentRequest.getPart("message")?.contentType ?: "nada"
+                receivedLength = receivedLength,
+                receivedContentType = receivedContentType
             )
             currentMessageResponse.update { response }
             resultReady.countDown()
         }
-        return Signature(myServerName, receivedHash)
+        return Signature(
+            name = myServerName,
+            hash = receivedHash,
+            contentType = receivedContentType,
+            contentLength = receivedLength
+        )
     }
 
     override fun sendMessage(body: String): PlayResponse {
@@ -99,6 +107,13 @@ class ApiServicesImpl: RegisterNodeApiService, RelayApiService, PlayApiService {
         doHash(body.encodeToByteArray(), salt),
     )
 
+    private fun currentContentType(): String {
+        return if (currentRequest.contentType.startsWith(MediaType.MULTIPART_FORM_DATA_VALUE)) {
+            currentRequest.getPart("message")?.contentType ?: "nada"
+        } else {
+            currentRequest.contentType
+        }
+    }
     private fun doHash(body: ByteArray, salt: String):  String {
         val saltBytes = Base64.getDecoder().decode(salt)
         messageDigest.update(saltBytes)

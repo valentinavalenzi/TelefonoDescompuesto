@@ -186,14 +186,26 @@
       },
       "signature": {
         "type": "object",
+        "required": [
+          "name",
+          "hash"
+        ],
         "properties": {
           "name": {
             "type": "string",
             "description": "El nombre del nodo que firmo"
           },
-          "hash": {
+          "contentType": {
             "type": "string",
             "description": "El hash de la firma del nodo"
+          },
+          "contentLength": {
+            "type": "integer",
+            "description": "La longitud del contenido"
+          },
+          "hash": {
+            "type": "string",
+            "description": "El hash del contenido calculado por el nodo"
           }
         }
       },
