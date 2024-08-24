@@ -24,4 +24,4 @@
 pom.xml
 README.md
 src/main/resources/application.yaml
-src/main/kotlin/ar/edu/austral/inf/sd/api/RelayApiController.kt
+#src/main/kotlin/ar/edu/austral/inf/sd/api/RelayApiController.kt
