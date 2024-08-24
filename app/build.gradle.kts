@@ -52,7 +52,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "ar.edu.austral.inf.sd.app.ApplicationKt"
+    mainClass = "ar.edu.austral.inf.sd.ApplicationKt"
 }
 
 tasks.named<Test>("test") {
@@ -69,7 +69,7 @@ openApiGenerate {
 
     configOptions.put("serviceInterface", "true")
 
-    configOptions.put("basePackage", "ar.edu.austral.inf.sd.base")
+    configOptions.put("basePackage", "ar.edu.austral.inf.sd")
     configOptions.put("apiPackage", "ar.edu.austral.inf.sd.api")
     configOptions.put("modelPackage", "ar.edu.austral.inf.sd.model")
     configOptions.put("gradleBuildFile", "false")
