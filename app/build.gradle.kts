@@ -61,15 +61,12 @@ tasks.named<Test>("test") {
 }
 
 openApiGenerate {
-    System.out.println(templateDir)
     templateDir.set(project.layout.projectDirectory.dir("src/main/openapi-generator").toString())
     generatorName.set("kotlin-spring")
     generateApiTests.set(false)
     generateApiDocumentation.set(false)
     inputSpec.set(projectDir.resolve("src/main/openapi.json").path)
 
-//    configOptions.put("appendRequestToHandler", "true")
-//    configOptions.put("reactive", "true")
     configOptions.put("serviceInterface", "true")
 
     configOptions.put("basePackage", "ar.edu.austral.inf.sd.base")
@@ -82,17 +79,23 @@ openApiGenerate {
     typeMappings.put("object+binary", "kotlin.ByteArray")
     typeMappings.put("object+multipart", "kotlin.ByteArray")
 
-    outputDir.set(projectDir.resolve("build/generated").absolutePath)
+    outputDir.set(projectDir.absolutePath)
 }
 
 sourceSets {
     main {
         kotlin {
-            srcDirs(project.layout.buildDirectory.dir("generated/src/main/kotlin"))
+//            srcDirs(project.layout.buildDirectory.dir("generated/src/main/kotlin"))
         }
     }
 }
 
 tasks.named("compileKotlin") {
+    dependsOn("openApiGenerate")
+}
+tasks.named("processResources") {
+    dependsOn("openApiGenerate")
+}
+tasks.named("processTestResources") {
     dependsOn("openApiGenerate")
 }
