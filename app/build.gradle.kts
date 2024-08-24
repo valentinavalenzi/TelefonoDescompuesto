@@ -72,12 +72,14 @@ openApiGenerate {
 //    configOptions.put("reactive", "true")
     configOptions.put("serviceInterface", "true")
 
-    configOptions.put("apiPackage", "ar.edu.austral.inf.sd")
-    configOptions.put("basePackage", "ar.edu.austral.inf.sd")
-    configOptions.put("modelPackage", "ar.edu.austral.inf.sd")
+    configOptions.put("basePackage", "ar.edu.austral.inf.sd.base")
+    configOptions.put("apiPackage", "ar.edu.austral.inf.sd.api")
+    configOptions.put("modelPackage", "ar.edu.austral.inf.sd.model")
     configOptions.put("gradleBuildFile", "true")
     configOptions.put("useSpringBoot3", "true")
     configOptions.put("documentationProvider", "none")
+
+    typeMappings.put("object+binary", "kotlin.ByteArray")
 
     outputDir.set(projectDir.resolve("build/generated").absolutePath)
 }

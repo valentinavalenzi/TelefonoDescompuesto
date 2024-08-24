@@ -54,9 +54,10 @@
         "requestBody": {
           "description": "El mensaje y las firmas anteriores",
           "content": {
-            "multipart/mixed": {
+            "multipart/form-data": {
               "schema": {
-                "type": "object"
+                "type": "object",
+                "format": "binary"
               }
             }
           }
@@ -85,7 +86,8 @@
           "content": {
             "*/*": {
               "schema": {
-                "type": "object"
+                "type": "object",
+                "format": "binary"
               }
             }
           }

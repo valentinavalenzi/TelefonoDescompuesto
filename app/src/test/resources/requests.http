@@ -3,3 +3,27 @@ POST http://192.168.111.61:8089/register-node?
     host=1.2.3.4&
     port=8080&
     name=SoyLegenda
+
+###
+POST http://192.168.111.61:8089/play
+Content-Type: application/json
+
+{
+"hola": true
+}
+
+###
+POST http://192.168.111.61:8089/play3
+Content-Type: text/plain
+
+{asdsadadad
+adasdad"hola": true
+}
+
+###
+POST http://192.168.111.61:8080/test/jugar
+Content-Type: application/xml
+
+<a>
+    <b>asdada</b>
+</a>
