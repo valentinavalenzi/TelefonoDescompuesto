@@ -82,14 +82,6 @@ openApiGenerate {
     outputDir.set(projectDir.absolutePath)
 }
 
-sourceSets {
-    main {
-        kotlin {
-//            srcDirs(project.layout.buildDirectory.dir("generated/src/main/kotlin"))
-        }
-    }
-}
-
 tasks.named("compileKotlin") {
     dependsOn("openApiGenerate")
 }
