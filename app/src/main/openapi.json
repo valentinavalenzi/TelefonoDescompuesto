@@ -218,6 +218,7 @@
       "playResponse": {
         "type": "object",
         "required": [
+          "contentResult",
           "originalContentType",
           "originalLength",
           "originalHash",
@@ -226,6 +227,10 @@
           "receivedHash"
         ],
         "properties": {
+          "contentResult": {
+            "type": "string",
+            "description": "el resultado del contenido"
+          },
           "originalContentType": {
             "type": "string",
             "description": "el tipo de contenido que enviaste"
