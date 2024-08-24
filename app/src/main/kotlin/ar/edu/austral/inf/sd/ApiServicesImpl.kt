@@ -43,7 +43,7 @@ class ApiServicesImpl: RegisterNodeApiService, RelayApiService, PlayApiService {
     }
 
     override fun relayMessage(message: String, signature: String?) {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     override fun sendMessage(body: String): PlayResponse {

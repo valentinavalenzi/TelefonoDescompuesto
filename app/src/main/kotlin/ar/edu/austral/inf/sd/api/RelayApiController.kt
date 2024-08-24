@@ -18,6 +18,7 @@ import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
+import org.springframework.web.multipart.MultipartHttpServletRequest
 
 import kotlin.collections.List
 import kotlin.collections.Map
@@ -34,7 +35,11 @@ class RelayApiController(@Autowired(required = true) val service: RelayApiServic
         produces = ["application/json"],
         consumes = ["multipart/form-data"]
     )
-    fun relayMessage( @RequestPart(value = "message", required = true) message: kotlin.String , @RequestPart(value = "signature", required = false) signature: kotlin.String? ): ResponseEntity<kotlin.Any> {
+    fun relayMessage(
+        @RequestPart(value = "message", required = true) message: kotlin.String,
+        @RequestPart(value = "signature", required = false) signature: kotlin.String?,
+        multipartHttpServletRequest: MultipartHttpServletRequest,
+    ): ResponseEntity<kotlin.Any> {
         return ResponseEntity(service.relayMessage(message, signature), HttpStatus.valueOf(202))
     }
 }
