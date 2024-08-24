@@ -62,7 +62,7 @@ class ApiServicesImpl: RegisterNodeApiService, RelayApiService, PlayApiService {
             val response = current.copy(
                 receivedHash = receivedHash,
                 receivedLength = message.length,
-                receivedContentType = currentRequest.contentType
+                receivedContentType = currentRequest.getPart("message")?.contentType ?: "nada"
             )
             currentMessageResponse.update { response }
             resultReady.countDown()
