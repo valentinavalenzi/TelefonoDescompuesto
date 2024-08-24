@@ -3,7 +3,7 @@
  */
 package ar.edu.austral.inf.sd
 
-import ar.edu.austral.inf.sd.Application
+import ar.edu.austral.inf.sd.base.Application
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertNotNull
 

@@ -72,6 +72,7 @@ openApiGenerate {
 //    configOptions.put("reactive", "true")
     configOptions.put("serviceInterface", "true")
 
+    configOptions.put("gradleBuildFile", "false")
     configOptions.put("basePackage", "ar.edu.austral.inf.sd.base")
     configOptions.put("apiPackage", "ar.edu.austral.inf.sd.api")
     configOptions.put("modelPackage", "ar.edu.austral.inf.sd.model")
