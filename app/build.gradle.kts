@@ -27,6 +27,7 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -75,6 +76,7 @@ openApiGenerate {
     configOptions.put("gradleBuildFile", "false")
     configOptions.put("useSpringBoot3", "true")
     configOptions.put("documentationProvider", "none")
+    generateAliasAsModel.set(false)
 
     typeMappings.put("object+binary", "kotlin.ByteArray")
     typeMappings.put("object+multipart", "kotlin.ByteArray")

@@ -60,9 +60,8 @@
                 "message": {
                   "contentType": "*/*"
                 },
-                "signature": {
-                  "contentType": "text/plain",
-                  "style": ""
+                "signatures": {
+                  "contentType": "application/json"
                 }
               },
               "schema": {
@@ -74,8 +73,8 @@
                   "message": {
                     "$ref": "#/components/schemas/base64String"
                   },
-                  "signature": {
-                    "type": "string"
+                  "signatures": {
+                    "$ref": "#/components/schemas/signatures"
                   }
                 }
               }
@@ -88,7 +87,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/signature"
                 }
               }
             }
@@ -198,18 +197,49 @@
           }
         }
       },
+      "signatures": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/signature"
+        }
+      },
       "playResponse": {
         "type": "object",
+        "required": [
+          "originalContentType",
+          "originalLength",
+          "originalHash",
+          "receivedContentType",
+          "receivedLength",
+          "receivedHash"
+        ],
         "properties": {
-          "hash": {
+          "originalContentType": {
+            "type": "string",
+            "description": "el tipo de contenido que enviaste"
+          },
+          "originalLength": {
+            "type": "integer",
+            "description": "la longitud original que enviaste"
+          },
+          "originalHash": {
             "type": "string",
             "description": "el hash del mensaje original que enviaste"
           },
+          "receivedContentType": {
+            "type": "string",
+            "description": "el tipo de contenido que volvió"
+          },
+          "receivedLength": {
+            "type": "integer",
+            "description": "la longitud que volvió"
+          },
+          "receivedHash": {
+            "type": "string",
+            "description": "el hash del mensaje que volvió"
+          },
           "signatures": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/signature"
-            }
+            "$ref": "#/components/schemas/signatures"
           }
         }
       }
