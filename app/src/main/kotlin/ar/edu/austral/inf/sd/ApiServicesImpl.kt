@@ -63,6 +63,7 @@ class ApiServicesImpl: RegisterNodeApiService, RelayApiService, PlayApiService {
         if (current != null) {
             // me llego algo, no lo tengo que pasar
             val response = current.copy(
+                contentResult = if (receivedHash == current.originalHash) "Success" else "Failure",
                 receivedHash = receivedHash,
                 receivedLength = receivedLength,
                 receivedContentType = receivedContentType
@@ -99,6 +100,7 @@ class ApiServicesImpl: RegisterNodeApiService, RelayApiService, PlayApiService {
     }
 
     private fun newResponse(body: String) = PlayResponse(
+        "Unknown",
         currentRequest.contentType,
         body.length,
         doHash(body.encodeToByteArray(), salt),
