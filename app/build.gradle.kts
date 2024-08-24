@@ -81,13 +81,3 @@ openApiGenerate {
 
     outputDir.set(projectDir.absolutePath)
 }
-
-tasks.named("compileKotlin") {
-    dependsOn("openApiGenerate")
-}
-tasks.named("processResources") {
-    dependsOn("openApiGenerate")
-}
-tasks.named("processTestResources") {
-    dependsOn("openApiGenerate")
-}

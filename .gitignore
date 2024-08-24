@@ -29,7 +29,4 @@ replay_pid*
 
 # Ignore Gradle build output directory
 build
-/app/src/main/kotlin/ar/edu/austral/inf/sd/api
-/app/src/main/kotlin/ar/edu/austral/inf/sd/model
-/app/src/main/kotlin/ar/edu/austral/inf/sd/app
 /app/.openapi-generator/

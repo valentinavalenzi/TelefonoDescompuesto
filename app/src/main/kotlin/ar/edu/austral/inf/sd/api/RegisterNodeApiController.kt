@@ -1,5 +1,6 @@
 package ar.edu.austral.inf.sd.api
 
+import ar.edu.austral.inf.sd.model.RegisterResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -25,16 +26,15 @@ import kotlin.collections.Map
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
-class RelayApiController(@Autowired(required = true) val service: RelayApiService) {
+class RegisterNodeApiController(@Autowired(required = true) val service: RegisterNodeApiService) {
 
 
     @RequestMapping(
         method = [RequestMethod.POST],
-        value = ["/relay"],
-        produces = ["application/json"],
-        consumes = ["multipart/form-data"]
+        value = ["/register-node"],
+        produces = ["application/json"]
     )
-    fun relayMessage( @RequestPart(value = "message", required = true) message: kotlin.String , @RequestPart(value = "signature", required = false) signature: kotlin.String? ): ResponseEntity<kotlin.Any> {
-        return ResponseEntity(service.relayMessage(message, signature), HttpStatus.valueOf(202))
+    fun registerNode( @Valid @RequestParam(value = "host", required = false) host: kotlin.String?, @Valid @RequestParam(value = "port", required = false) port: kotlin.Int?, @Valid @RequestParam(value = "name", required = false) name: kotlin.String?): ResponseEntity<RegisterResponse> {
+        return ResponseEntity(service.registerNode(host, port, name), HttpStatus.valueOf(200))
     }
 }

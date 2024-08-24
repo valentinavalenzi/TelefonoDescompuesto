@@ -1,5 +1,6 @@
 package ar.edu.austral.inf.sd.api
 
+import ar.edu.austral.inf.sd.model.PlayResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -25,16 +26,15 @@ import kotlin.collections.Map
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
-class RelayApiController(@Autowired(required = true) val service: RelayApiService) {
+class PlayApiController(@Autowired(required = true) val service: PlayApiService) {
 
 
     @RequestMapping(
         method = [RequestMethod.POST],
-        value = ["/relay"],
-        produces = ["application/json"],
-        consumes = ["multipart/form-data"]
+        value = ["/play"],
+        produces = ["application/json"]
     )
-    fun relayMessage( @RequestPart(value = "message", required = true) message: kotlin.String , @RequestPart(value = "signature", required = false) signature: kotlin.String? ): ResponseEntity<kotlin.Any> {
-        return ResponseEntity(service.relayMessage(message, signature), HttpStatus.valueOf(202))
+    fun sendMessage( @Valid @RequestBody body: kotlin.String): ResponseEntity<PlayResponse> {
+        return ResponseEntity(service.sendMessage(body), HttpStatus.valueOf(200))
     }
 }
