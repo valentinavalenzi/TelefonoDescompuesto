@@ -1,4 +1,4 @@
-package ar.edu.austral.inf.sd.api
+package ar.edu.austral.inf.sd.server.api
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -10,6 +10,7 @@ import jakarta.validation.ConstraintViolationException
 sealed class ApiException(msg: String, val code: Int) : Exception(msg)
 
 class NotFoundException(msg: String, code: Int = HttpStatus.NOT_FOUND.value()) : ApiException(msg, code)
+class BadRequestException(msg: String) : ApiException(msg, HttpStatus.BAD_REQUEST.value())
 
 
 @ControllerAdvice

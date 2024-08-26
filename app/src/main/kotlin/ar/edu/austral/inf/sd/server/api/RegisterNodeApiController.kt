@@ -1,6 +1,6 @@
-package ar.edu.austral.inf.sd.api
+package ar.edu.austral.inf.sd.server.api
 
-import ar.edu.austral.inf.sd.model.PlayResponse
+import ar.edu.austral.inf.sd.server.model.RegisterResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -26,15 +26,15 @@ import kotlin.collections.Map
 @RestController
 @Validated
 @RequestMapping("\${api.base-path:}")
-class PlayApiController(@Autowired(required = true) val service: PlayApiService) {
+class RegisterNodeApiController(@Autowired(required = true) val service: RegisterNodeApiService) {
 
 
     @RequestMapping(
         method = [RequestMethod.POST],
-        value = ["/play"],
+        value = ["/register-node"],
         produces = ["application/json"]
     )
-    fun sendMessage( @Valid @RequestBody body: kotlin.String): ResponseEntity<PlayResponse> {
-        return ResponseEntity(service.sendMessage(body), HttpStatus.valueOf(200))
+    fun registerNode( @Valid @RequestParam(value = "host", required = false) host: kotlin.String?, @Valid @RequestParam(value = "port", required = false) port: kotlin.Int?, @Valid @RequestParam(value = "name", required = false) name: kotlin.String?): ResponseEntity<RegisterResponse> {
+        return ResponseEntity(service.registerNode(host, port, name), HttpStatus.valueOf(200))
     }
 }

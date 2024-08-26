@@ -1,4 +1,4 @@
-package ar.edu.austral.inf.sd.model
+package ar.edu.austral.inf.sd.server.model
 
 import java.util.Objects
 import com.fasterxml.jackson.annotation.JsonProperty

@@ -5,8 +5,8 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
 
-    id("org.springframework.boot") version "2.6.7"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("org.springframework.boot") version "3.3.3"
+    id("io.spring.dependency-management") version "1.1.6"
     id("org.openapi.generator") version "7.8.0"
 
 }
@@ -33,8 +33,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springdoc:springdoc-openapi-ui:1.6.8")
 
-    implementation("javax.validation:validation-api")
-    implementation("javax.annotation:javax.annotation-api:1.3.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
 
     implementation("jakarta.servlet:jakarta.servlet-api:6.1.0")
     implementation("jakarta.validation:jakarta.validation-api:3.1.0")
@@ -42,6 +41,11 @@ dependencies {
 
     implementation("io.swagger.core.v3:swagger-annotations:2.1.10")
     implementation("io.swagger.core.v3:swagger-models:2.1.10")
+
+    implementation("org.springframework:spring-web:6.1.12")
+
+    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -61,7 +65,7 @@ tasks.named<Test>("test") {
     useJUnitPlatform()
 }
 
-openApiGenerate {
+tasks.create("openApiGenerateServer", org.openapitools.generator.gradle.plugin.tasks.GenerateTask::class.java) {
     templateDir.set(project.layout.projectDirectory.dir("src/main/openapi-generator").toString())
     generatorName.set("kotlin-spring")
     generateApiTests.set(false)
@@ -71,8 +75,8 @@ openApiGenerate {
     configOptions.put("serviceInterface", "true")
 
     configOptions.put("basePackage", "ar.edu.austral.inf.sd")
-    configOptions.put("apiPackage", "ar.edu.austral.inf.sd.api")
-    configOptions.put("modelPackage", "ar.edu.austral.inf.sd.model")
+    configOptions.put("apiPackage", "ar.edu.austral.inf.sd.server.api")
+    configOptions.put("modelPackage", "ar.edu.austral.inf.sd.server.model")
     configOptions.put("gradleBuildFile", "false")
     configOptions.put("useSpringBoot3", "true")
     configOptions.put("documentationProvider", "none")
@@ -82,4 +86,27 @@ openApiGenerate {
     typeMappings.put("object+multipart", "kotlin.ByteArray")
 
     outputDir.set(projectDir.absolutePath)
+}
+
+tasks.create("openApiGenerateClient", org.openapitools.generator.gradle.plugin.tasks.GenerateTask::class.java) {
+    templateDir.set(project.layout.projectDirectory.dir("src/main/openapi-generator").toString())
+    generatorName.set("kotlin")
+    library.set("jvm-spring-restclient")
+    inputSpec.set(projectDir.resolve("src/main/openapi.json").path)
+
+    configOptions.put("serializationLibrary", "jackson")
+    configOptions.put("omitGradleWrapper", "true")
+    configOptions.put("packageName", "ar.edu.austral.inf.sd.client")
+
+    configOptions.put("gradleBuildFile", "false")
+    configOptions.put("useSpringBoot3", "true")
+    configOptions.put("documentationProvider", "none")
+    generateAliasAsModel.set(false)
+
+    typeMappings.put("object+binary", "kotlin.ByteArray")
+    typeMappings.put("object+multipart", "kotlin.ByteArray")
+
+    outputDir.set(projectDir.absolutePath)
+
+    // additionalProperties.put()
 }

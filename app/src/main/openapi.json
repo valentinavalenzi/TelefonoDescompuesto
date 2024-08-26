@@ -67,7 +67,8 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "message"
+                  "message",
+                  "signatures"
                 ],
                 "properties": {
                   "message": {
@@ -210,9 +211,15 @@
         }
       },
       "signatures": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/signature"
+        "type": "object",
+        "required": ["items"],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/signature"
+            }
+          }
         }
       },
       "playResponse": {
@@ -224,7 +231,8 @@
           "originalHash",
           "receivedContentType",
           "receivedLength",
-          "receivedHash"
+          "receivedHash",
+          "signatures"
         ],
         "properties": {
           "contentResult": {

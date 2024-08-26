@@ -21,6 +21,7 @@ class ApplicationListener {
         //
         if (registerHost != "" && registerPort != -1) {
             println("me voy a registrar en el server $registerHost:$registerPort")
+            apiServices.registerToServer(registerHost, registerPort)
         }
     }
 

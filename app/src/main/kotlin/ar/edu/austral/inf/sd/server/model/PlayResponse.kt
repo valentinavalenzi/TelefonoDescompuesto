@@ -1,7 +1,7 @@
-package ar.edu.austral.inf.sd.model
+package ar.edu.austral.inf.sd.server.model
 
 import java.util.Objects
-import ar.edu.austral.inf.sd.model.Signature
+import ar.edu.austral.inf.sd.server.model.Signatures
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.validation.constraints.DecimalMax
 import jakarta.validation.constraints.DecimalMin
@@ -41,7 +41,7 @@ data class PlayResponse(
     @get:JsonProperty("receivedHash", required = true) val receivedHash: kotlin.String,
 
     @field:Valid
-    @get:JsonProperty("signatures") val signatures: kotlin.collections.List<Signature>? = null
+    @get:JsonProperty("signatures", required = true) val signatures: Signatures
     ) {
 
 }

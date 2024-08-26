@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.ComponentScan
 
 @SpringBootApplication
-@ComponentScan(basePackages = ["ar.edu.austral.inf.sd", "ar.edu.austral.inf.sd.api", "ar.edu.austral.inf.sd.model"])
+@ComponentScan(basePackages = ["ar.edu.austral.inf.sd", "ar.edu.austral.inf.sd.server.api", "ar.edu.austral.inf.sd.server.model"])
 open class Application
 
 fun main(args: Array<String>) {

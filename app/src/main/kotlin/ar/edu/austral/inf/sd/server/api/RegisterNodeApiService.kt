@@ -1,6 +1,6 @@
-package ar.edu.austral.inf.sd.api
+package ar.edu.austral.inf.sd.server.api
 
-import ar.edu.austral.inf.sd.model.RegisterResponse
+import ar.edu.austral.inf.sd.server.model.RegisterResponse
 
 interface RegisterNodeApiService {
 

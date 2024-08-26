@@ -23,5 +23,9 @@
 #!docs/README.md
 pom.xml
 README.md
+#gradlew
+#gradlew.bat
+settings.gradle
+build.gradle
 src/main/resources/application.yaml
 #src/main/kotlin/ar/edu/austral/inf/sd/api/RelayApiController.kt

@@ -7,7 +7,7 @@ import ar.edu.austral.inf.sd.Application
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.assertNotNull
 
-class AppTest {
+class   AppTest {
     @Test
     fun appHasAGreeting() {
         val classUnderTest = Application()

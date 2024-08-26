@@ -1,4 +1,4 @@
-package ar.edu.austral.inf.sd.api
+package ar.edu.austral.inf.sd.server.api
 
 import org.springframework.web.context.request.NativeWebRequest
 

@@ -1,16 +1,17 @@
 package ar.edu.austral.inf.sd
 
-import ar.edu.austral.inf.sd.api.PlayApiService
-import ar.edu.austral.inf.sd.api.RegisterNodeApiService
-import ar.edu.austral.inf.sd.api.RelayApiService
-import ar.edu.austral.inf.sd.model.PlayResponse
-import ar.edu.austral.inf.sd.model.RegisterResponse
-import ar.edu.austral.inf.sd.model.Signature
+import ar.edu.austral.inf.sd.server.api.PlayApiService
+import ar.edu.austral.inf.sd.server.api.RegisterNodeApiService
+import ar.edu.austral.inf.sd.server.api.RelayApiService
+import ar.edu.austral.inf.sd.server.api.BadRequestException
+import ar.edu.austral.inf.sd.server.model.PlayResponse
+import ar.edu.austral.inf.sd.server.model.RegisterResponse
+import ar.edu.austral.inf.sd.server.model.Signature
+import ar.edu.austral.inf.sd.server.model.Signatures
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.update
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
@@ -18,7 +19,6 @@ import java.security.MessageDigest
 import java.util.*
 import java.util.concurrent.CountDownLatch
 import kotlin.random.Random
-
 
 @Component
 class ApiServicesImpl: RegisterNodeApiService, RelayApiService, PlayApiService {
@@ -28,8 +28,7 @@ class ApiServicesImpl: RegisterNodeApiService, RelayApiService, PlayApiService {
     @Value("\${server.port:8080}")
     private val myServerPort: Int = 0
     private val nodes: MutableList<RegisterResponse> = mutableListOf()
-    private val isServer
-        get() = nodes.isNotEmpty()
+    private var nextNode: RegisterResponse? = null
     private val messageDigest = MessageDigest.getInstance("SHA-512")
     private val salt = newSalt()
     private val currentRequest
@@ -55,18 +54,23 @@ class ApiServicesImpl: RegisterNodeApiService, RelayApiService, PlayApiService {
         return RegisterResponse(nextNode.nextHost, nextNode.nextPort, uuid, newSalt())
     }
 
-    override fun relayMessage(message: kotlin.String, signatures: kotlin.collections.List<Signature>?): Signature {
-        val current = currentMessageWaiting.getAndUpdate { null }
+    override fun relayMessage(message: String, signatures: Signatures): Signature {
         val receivedHash = doHash(message.encodeToByteArray(), salt)
-        val receivedContentType = currentContentType()
+        val receivedContentType = currentRequest.getPart("message")?.contentType ?: "nada"
         val receivedLength = message.length
-        if (current != null) {
+        if (nextNode != null) {
+            // Soy un relé. busco el siguiente y lo mando
+            // @ToDo do some work here
+        } else {
             // me llego algo, no lo tengo que pasar
+            if (currentMessageWaiting.value == null) throw BadRequestException("no waiting message")
+            val current = currentMessageWaiting.getAndUpdate { null }!!
             val response = current.copy(
                 contentResult = if (receivedHash == current.originalHash) "Success" else "Failure",
                 receivedHash = receivedHash,
                 receivedLength = receivedLength,
-                receivedContentType = receivedContentType
+                receivedContentType = receivedContentType,
+                signatures = signatures
             )
             currentMessageResponse.update { response }
             resultReady.countDown()
@@ -80,23 +84,33 @@ class ApiServicesImpl: RegisterNodeApiService, RelayApiService, PlayApiService {
     }
 
     override fun sendMessage(body: String): PlayResponse {
+        if (nodes.isEmpty()) {
+            // inicializamos el primer nodo como yo mismo
+            val me = RegisterResponse(currentRequest.serverName, myServerPort, "", "")
+            nodes.add(me)
+        }
         currentMessageWaiting.update { newResponse(body) }
-        sendRelayMessage(body, currentRequest.contentType)
+        val contentType = currentRequest.contentType
+        sendRelayMessage(body, contentType, nodes.last(), Signatures(listOf()))
         resultReady.await()
         resultReady = CountDownLatch(1)
         return currentMessageResponse.value!!
     }
 
-    private fun sendRelayMessage(message: String, contentType: String) {
-        if (isServer) {
-            // a este nodo le tengo que mandar el mensaje
-            val firstNode = nodes.last()
-            // @ToDo acá laburen ustedes
-        } else {
-            // estoy solo, me lo automando
-            // sleep(1000L)
-            relayMessage(message, listOf())
-        }
+    internal fun registerToServer(registerHost: String, registerPort: Int) {
+        // @ToDo acá tienen que trabajar ustedes
+        val registerNodeResponse: RegisterResponse = RegisterResponse("", -1, "", "")
+        println("nextNode = ${registerNodeResponse}")
+        nextNode = with(registerNodeResponse) { RegisterResponse(nextHost, nextPort, uuid, hash) }
+    }
+
+    private fun sendRelayMessage(body: String, contentType: String, relayNode: RegisterResponse, signatures: Signatures) {
+        // @ToDo acá tienen que trabajar ustedes
+    }
+
+    private fun clientSign(message: String, contentType: String): Signature {
+        val receivedHash = doHash(message.encodeToByteArray(), salt)
+        return Signature(myServerName, receivedHash, contentType, message.length)
     }
 
     private fun newResponse(body: String) = PlayResponse(
@@ -104,18 +118,12 @@ class ApiServicesImpl: RegisterNodeApiService, RelayApiService, PlayApiService {
         currentRequest.contentType,
         body.length,
         doHash(body.encodeToByteArray(), salt),
-        currentRequest.contentType,
-        body.length,
-        doHash(body.encodeToByteArray(), salt),
+        "Unknown",
+        -1,
+        "N/A",
+        Signatures(listOf())
     )
 
-    private fun currentContentType(): String {
-        return if (currentRequest.contentType.startsWith(MediaType.MULTIPART_FORM_DATA_VALUE)) {
-            currentRequest.getPart("message")?.contentType ?: "nada"
-        } else {
-            currentRequest.contentType
-        }
-    }
     private fun doHash(body: ByteArray, salt: String):  String {
         val saltBytes = Base64.getDecoder().decode(salt)
         messageDigest.update(saltBytes)
