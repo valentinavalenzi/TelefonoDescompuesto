@@ -34,7 +34,7 @@ class ApiServicesImpl @Autowired constructor(
 ): RegisterNodeApiService, RelayApiService, PlayApiService {
 
     @Value("\${server.name:nada}")
-    private val myServerName: String = "localhost"
+    private val myServerName: String = ""
     @Value("\${server.port:8080}")
     private val myServerPort: Int = 0
     private val nodes: MutableList<RegisterResponse> = mutableListOf()
@@ -110,7 +110,7 @@ class ApiServicesImpl @Autowired constructor(
     }
 
     internal fun registerToServer(registerHost: String, registerPort: Int) {
-        val registerUrl = "http://${registerHost}:${registerPort}/register-node?host=${myServerName}&port=${myServerPort}&name=${myServerName}"
+        val registerUrl = "http://${registerHost}:${registerPort}/register-node?host=localhost&port=${myServerPort}&name=${myServerName}"
         try {
             val response = restTemplate.postForEntity<RegisterResponse>(registerUrl)
 
@@ -123,7 +123,7 @@ class ApiServicesImpl @Autowired constructor(
     }
 
     private fun sendRelayMessage(body: String, contentType: String, relayNode: RegisterResponse, signatures: Signatures) {
-        val nextUrl = "http://${relayNode.nextHost}:${relayNode.nextPort}/relay-message"
+        val nextUrl = "http://${relayNode.nextHost}:${relayNode.nextPort}/relay"
 
         val messageHeaders = HttpHeaders().apply { setContentType(MediaType.parseMediaType(contentType)) }
         val messagePart = HttpEntity(body, messageHeaders)
